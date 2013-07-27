@@ -27,6 +27,6 @@
 [force_push]: https://help.github.com/articles/dealing-with-non-fast-forward-errors
 [fork]: https://help.github.com/articles/fork-a-repo
 [pr]: https://help.github.com/articles/using-pull-requests
+[rebase]: https://help.github.com/articles/interactive-rebase
 [rvm]: https://rvm.io
-[squash]: https://help.github.com/articles/interactive-rebase
 [travis_yml]: https://github.com/vmg/redcarpet/blob/master/.travis.yml
