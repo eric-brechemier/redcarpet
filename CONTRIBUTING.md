@@ -2,31 +2,24 @@
 
 1. [Fork the repository.][fork]
 2. [Create a topic branch.][branch]
-3. [Install RVM.][rvm]
-4. Install ruby 1.9.3:
-
-        rvm install 1.9.3
-        rvm use 1.9.3 --default
-        ruby --version
-
-5. [Install bundler.][bundler]
-6. Check that unit tests pass:
-
-        rake test
-
-7. Write a failing test to capture existing bug or lack of feature.
-8. Run `rake test` to verify that test fails.
-9. Implement your feature or bug fix.
-10. Ensure tests pass.
-11. If it's a new feature or a bug fix,
+3. Check which version of Ruby is installed on your machine with `ruby -v`.
+   The list of supported Ruby versions is listed in [.travis.yml][travis_yml].
+   Set up one of these versions; use of [RVM][rvm] is recommended to switch
+   easily between different versions.
+4. [Install bundler.][bundler]
+5. Check that unit tests pass with `rake test`.
+6. Write a failing test to capture existing bug or lack of feature.
+7. Run `rake test` to verify that test fails.
+8. Implement your feature or bug fix.
+9. Ensure tests pass.
+10. If it's a new feature or a bug fix,
     please add an entry to the changelog file.
-12. Add, commit, and push your changes.
-13. [Submit a pull request.][pr]
+11. Add, commit, and push your changes.
+12. [Submit a pull request.][pr]
 
-[fork]: https://help.github.com/articles/fork-a-repo
 [branch]: http://learn.github.com/p/branching.html
+[bundler]: http://bundler.io
+[fork]: https://help.github.com/articles/fork-a-repo
 [pr]: https://help.github.com/articles/using-pull-requests
-
-[rvm]: https://rvm.io/rvm/install
-[bundler]: http://bundler.io/#getting-started
-
+[rvm]: https://rvm.io
+[travis_yml]: https://github.com/vmg/redcarpet/blob/master/.travis.yml
