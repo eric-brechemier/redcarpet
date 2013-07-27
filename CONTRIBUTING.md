@@ -22,7 +22,7 @@
 14. [Squash your commits into a single one][rebase]
     and [force a push to the same branch][force_push].
 
-[branch]: http://learn.github.com/p/branching.html
+[branch]: http://git-scm.com/book/en/Git-Branching-Branching-Workflows#Topic-Branches
 [bundler]: http://bundler.io
 [force_push]: https://help.github.com/articles/dealing-with-non-fast-forward-errors
 [fork]: https://help.github.com/articles/fork-a-repo
