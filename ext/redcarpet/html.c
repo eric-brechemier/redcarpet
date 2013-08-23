@@ -17,7 +17,7 @@
 
 #include "markdown.h"
 #include "html.h"
-
+#include "ruby.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -245,11 +245,37 @@ rndr_highlight(struct buf *ob, const struct buf *text, void *opaque)
 }
 
 static int
+rndr_quote(struct buf *ob, const struct buf *text, void *opaque)
+{
+	if (!text || !text->size)
+		return 0;
+
+	BUFPUTSL(ob, "<q>");
+	bufput(ob, text->data, text->size);
+	BUFPUTSL(ob, "</q>");
+
+	return 1;
+}
+
+static int
 rndr_linebreak(struct buf *ob, void *opaque)
 {
 	struct html_renderopt *options = opaque;
 	bufputs(ob, USE_XHTML(options) ? "<br/>\n" : "<br>\n");
 	return 1;
+}
+
+char *header_id(const struct buf *text)
+{
+	VALUE str = rb_str_new2(bufcstr(text));
+	VALUE space_regex = rb_reg_new(" +", 2 /* length */, 0);
+	VALUE tags_regex = rb_reg_new("<\\/?[^>]*>", 10, 0);
+
+	VALUE heading = rb_funcall(str, rb_intern("gsub"), 2, space_regex, rb_str_new2("-"));
+	heading = rb_funcall(heading, rb_intern("gsub"), 2, tags_regex, rb_str_new2(""));
+	heading = rb_funcall(heading, rb_intern("downcase"), 0);
+
+	return StringValueCStr(heading);
 }
 
 static void
@@ -261,7 +287,7 @@ rndr_header(struct buf *ob, const struct buf *text, int level, void *opaque)
 		bufputc(ob, '\n');
 
 	if ((options->flags & HTML_TOC) && (level <= options->toc_data.nesting_level))
-		bufprintf(ob, "<h%d id=\"toc_%d\">", level, options->toc_data.header_count++);
+		bufprintf(ob, "<h%d id=\"%s\">", level, header_id(text));
 	else
 		bufprintf(ob, "<h%d>", level);
 
@@ -609,7 +635,7 @@ toc_header(struct buf *ob, const struct buf *text, int level, void *opaque)
 			BUFPUTSL(ob,"</li>\n<li>\n");
 		}
 
-		bufprintf(ob, "<a href=\"#toc_%d\">", options->toc_data.header_count++);
+		bufprintf(ob, "<a href=\"#%s\">", header_id(text));
 		if (text) escape_html(ob, text->data, text->size);
 		BUFPUTSL(ob, "</a>\n");
 	}
@@ -658,6 +684,7 @@ sdhtml_toc_renderer(struct sd_callbacks *callbacks, struct html_renderopt *optio
 		rndr_emphasis,
 		rndr_underline,
 		rndr_highlight,
+		rndr_quote,
 		NULL,
 		NULL,
 		toc_link,
@@ -705,6 +732,7 @@ sdhtml_renderer(struct sd_callbacks *callbacks, struct html_renderopt *options, 
 		rndr_emphasis,
 		rndr_underline,
 		rndr_highlight,
+		rndr_quote,
 		rndr_image,
 		rndr_linebreak,
 		rndr_link,
@@ -724,6 +752,7 @@ sdhtml_renderer(struct sd_callbacks *callbacks, struct html_renderopt *options, 
 	/* Prepare the options pointer */
 	memset(options, 0x0, sizeof(struct html_renderopt));
 	options->flags = render_flags;
+	options->toc_data.nesting_level = 99;
 
 	/* Prepare the callbacks */
 	memcpy(callbacks, &cb_default, sizeof(struct sd_callbacks));

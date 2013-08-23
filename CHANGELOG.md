@@ -1,5 +1,41 @@
 # Changelog
 
+* Add optional quote support through the `:quote` option. Render
+  quotations marks to `q` HTML tag.
+
+  This is a `"quote"`.
+
+  *Anatol Broder*
+
+* Ensure inline markup in titles is correctly stripped when generating
+  headers' anchor.
+
+  *Robin Dupret*
+
+* Revert the unescaping behavior on comments
+
+  This behavior doesn't follow the conformance suite.
+
+  *Robin Dupret*
+
+* Update the conformance test suite to provide better feedback to CI
+  systems.
+
+  *Robin Dupret*
+
+* Add optional footnotes support
+
+  Add PHP-Markdown style footnotes through the `:footnotes` option.
+
+  *Ben Dolman, Adam Florin, microjo, brief*
+
+* Enable GitHub style anchors for headers
+
+  Passing the `with_toc_data` option to a `HTML` render object now
+  generates GitHub style anchors.
+
+  *Matt Rogers*
+
 * Allow to set a maximum rendering level for HTML_TOC
 
   Allow the user to pass a `nesting_level` option when instantiating a
@@ -32,8 +68,6 @@
 
 * Ensure nested code spans put in emphasis work correctly *Robin Dupret*
 
-* Add optional footnotes support *Ben Dolman, Adam Florin, microjo, brief*
-  
 ## Version 2.3.0
 
 * Add a `:disable_indented_code_blocks` option *Dmitriy Kiriyenko*
